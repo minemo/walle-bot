@@ -21,6 +21,8 @@ public class WalleBotApplication extends ListenerAdapter {
 
 		String token = "";//ADD KEY HERE
 
+		//TODO add a Webserver, which handles the online interface
+
 		JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES)
 				.addEventListeners(new WalleBotApplication()).setActivity(Activity.watching("Minemo beim dummes Zeug machen zu"))
 				.build();
