@@ -19,7 +19,7 @@ public class WalleBotApplication extends ListenerAdapter {
 
 	public static void main(String[] args) throws LoginException {
 
-		String token = "";//ADD KEY HERE
+		String token = "ODI2MjA5MTgyMjMwMzgwNTQ0.YGJJQw.o6f2hakcpU8JlHpPw-ORs7F-rFo";//ADD KEY HERE
 
 		//TODO add a Webserver, which handles the online interface
 
