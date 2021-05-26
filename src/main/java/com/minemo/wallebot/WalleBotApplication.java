@@ -41,7 +41,7 @@ public class WalleBotApplication extends ListenerAdapter {
         AnsiConsole.systemInstall();
 
 
-        String token = "";//ADD KEY HERE
+        String token = "ODI2MjA5MTgyMjMwMzgwNTQ0.YGJJQw.lk-NNkGE0UK5clAWSJl2gVI9bio";//ADD KEY HERE
 
         JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES)
                 .addEventListeners(new WalleBotApplication()).setActivity(Activity.watching("Minemo beim dummes Zeug machen zu"))
@@ -68,6 +68,7 @@ public class WalleBotApplication extends ListenerAdapter {
         leavetime.put(leftmember.getUser().getAsTag(), System.currentTimeMillis() / 60000);
 
         //Calculate time in VC
+        //TODO make these values persistent as well
         long ontime;
         if(jointime.get(leftmember.getUser().getAsTag()) == null) {
             ontime = leavetime.get(leftmember.getUser().getAsTag()) - leavetime.get(leftmember.getUser().getAsTag());
@@ -209,7 +210,7 @@ public class WalleBotApplication extends ListenerAdapter {
                     //send Weebcoin
                     else if (msg.getContentRaw().startsWith("-c send")) {
                         Pattern address = Pattern.compile("0x([0-9]|[a-z])+?$");
-                        Pattern am = Pattern.compile("[0-9]\\.[0-9]");
+                        Pattern am = Pattern.compile("[0-9]+?\\.[0-9]");
                         Matcher admatch = address.matcher(msg.getContentRaw());
                         Matcher ammatch = am.matcher(msg.getContentRaw());
                         eb.setTitle("Weebcoin interface - Transaction");
