@@ -36,7 +36,7 @@ _Rewards for being online get displayed in another channel_
 ![alt text](https://i.imgur.com/JCMTMzC.png "The bot displays the amount, name and profile-picture of the earner")
 
 ---
-##What is planned ?
+## What is planned ?
 _I constantly get new ideas on what to add to the bot, so don't expect this list to be up to date._
 
 Some planned features are:
