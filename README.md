@@ -1,13 +1,13 @@
-#Walle-Bot
+# Walle-Bot
 
 ---
-##What is this ?
+## What is this ?
 This is discord bot with some features for me and my friends.
 It mainly focuses on a blockchain-based earn and reward system,
 to make the server more fun to use.
 
 ---
-##What can it do ?
+## What can it do ?
 The features of this bot currently include:
 + **DEBUG** show all accounts, and their respective balances
 + **DEBUG** show some Blockchain debug info like blocknumber and latest transaction
@@ -50,7 +50,7 @@ Some planned features are:
 + ...
     
 ---
-##Where can I test this ?
+## Where can I test this ?
 This bot currently only runs on our [Discord server](https://discord.gg/hEmGXFmdFS).
     
 
