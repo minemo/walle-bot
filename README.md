@@ -1,6 +1,5 @@
 # Walle-Bot
 
----
 ## What is this ?
 This is discord bot with some features for me and my friends.
 It mainly focuses on a blockchain-based earn and reward system,
