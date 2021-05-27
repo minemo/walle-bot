@@ -41,7 +41,7 @@ public class WalleBotApplication extends ListenerAdapter {
         AnsiConsole.systemInstall();
 
 
-        String token = "ODI2MjA5MTgyMjMwMzgwNTQ0.YGJJQw.lk-NNkGE0UK5clAWSJl2gVI9bio";//ADD KEY HERE
+        String token = "";//ADD KEY HERE
 
         JDABuilder.create(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.GUILD_VOICE_STATES)
                 .addEventListeners(new WalleBotApplication()).setActivity(Activity.watching("Minemo beim dummes Zeug machen zu"))
@@ -134,7 +134,8 @@ public class WalleBotApplication extends ListenerAdapter {
                 if (msg.getContentRaw().startsWith("-c")) {
                     //Read Accounts from file
                     try {
-                        this.accounts = Filewriter.readlines("accounts.txt");
+                        this.accounts = Filewriter.readlines("accounts.txt", false);
+                        this.accountsinv = Filewriter.readlines("accounts.txt", true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -209,35 +210,54 @@ public class WalleBotApplication extends ListenerAdapter {
                     }
                     //send Weebcoin
                     else if (msg.getContentRaw().startsWith("-c send")) {
-                        Pattern address = Pattern.compile("0x([0-9]|[a-z])+?$");
-                        Pattern am = Pattern.compile("[0-9]+?\\.[0-9]");
-                        Matcher admatch = address.matcher(msg.getContentRaw());
-                        Matcher ammatch = am.matcher(msg.getContentRaw());
                         eb.setTitle("Weebcoin interface - Transaction");
                         eb.setColor(Color.YELLOW);
-                        if (accounts.containsKey(reqauthor.getAsTag()) && admatch.find() && ammatch.find() && accounts.containsValue(admatch.group(0))) {
-                            try {
-                                String to = admatch.group(0);
-                                float amount = Float.parseFloat(ammatch.group(0));
-                                if (crypto.getbalance(accounts.get(reqauthor.getAsTag())).floatValue() / 1000000000000000000f >= amount) {
+                        Pattern address = Pattern.compile("0x([0-9]|[a-z])+?$");
+                        Matcher admatch = address.matcher(msg.getContentRaw());
+                        if(msg.getContentRaw().contains("all")) {
+                            if (accounts.containsKey(reqauthor.getAsTag()) && admatch.find() && accounts.containsValue(admatch.group(0))) {
+                                try {
+                                    String to = admatch.group(0);
+                                    float amount = crypto.getbalance(accounts.get(reqauthor.getAsTag())).floatValue();
                                     crypto.transact(accounts.get(reqauthor.getAsTag()), to, amount * 1000000000000000000f, "send");
-                                    eb.setDescription("Erfolgreicher Transfer von " + amount + " Weebcoin zu <@" + Objects.requireNonNull(guild.getMemberByTag(accountsinv.get(to))).getId() + ">");
-                                } else {
-                                    eb.setColor(Color.RED);
-                                    eb.setDescription("Du versuchst mehr Weebcoin zu senden, als sich auf deinem Account befinden!");
+                                    eb.setDescription("Erfolgreicher Transfer von allen (" + amount + ") Weebcoin zu <@" + Objects.requireNonNull(guild.getMemberByTag(accountsinv.get(to))).getId() + ">");
+                                } catch (IOException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (IOException e) {
-                                e.printStackTrace();
+                            } else if (!accounts.containsKey(reqauthor.getAsTag())) {
+                                eb.setColor(Color.RED);
+                                eb.setDescription("Benutzer besitzt keinen Account.\n\nUm einen Account zu beanspruchen benutze ```-c claim```");
+                            } else if (!admatch.find() || !accounts.containsValue(admatch.group(0))) {
+                                eb.setColor(Color.RED);
+                                eb.setDescription("Keinen gültigen Account angegeben.\nBitte stelle sicher, dass alles richtig geschrieben ist!");
                             }
-                        } else if (!accounts.containsKey(reqauthor.getAsTag())) {
-                            eb.setColor(Color.RED);
-                            eb.setDescription("Benutzer besitzt keinen Account.\n\nUm einen Account zu beanspruchen benutze ```-c claim```");
-                        } else if (!admatch.find() || !accounts.containsValue(admatch.group(0))) {
-                            eb.setColor(Color.RED);
-                            eb.setDescription("Keinen gültigen Account angegeben.\nBitte stelle sicher, dass alles richtig geschrieben ist!");
-                        } else if (!ammatch.find()) {
-                            eb.setColor(Color.RED);
-                            eb.setDescription("Keine Menge angegeben!");
+                        } else {
+                            Pattern am = Pattern.compile("[0-9]+\\.[0-9]+");
+                            Matcher ammatch = am.matcher(msg.getContentRaw());
+                            if (accounts.containsKey(reqauthor.getAsTag()) && admatch.find() && ammatch.find() && accounts.containsValue(admatch.group(0))) {
+                                try {
+                                    String to = admatch.group(0);
+                                    float amount = Float.parseFloat(ammatch.group());
+                                    if (crypto.getbalance(accounts.get(reqauthor.getAsTag())).floatValue() / 1000000000000000000f >= amount) {
+                                        crypto.transact(accounts.get(reqauthor.getAsTag()), to, amount * 1000000000000000000f, "send");
+                                        eb.setDescription("Erfolgreicher Transfer von " + amount + " Weebcoin zu <@" + Objects.requireNonNull(guild.getMemberByTag(accountsinv.get(to))).getId() + ">");
+                                    } else {
+                                        eb.setColor(Color.RED);
+                                        eb.setDescription("Du versuchst mehr Weebcoin zu senden, als sich auf deinem Account befinden!");
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else if (!accounts.containsKey(reqauthor.getAsTag())) {
+                                eb.setColor(Color.RED);
+                                eb.setDescription("Benutzer besitzt keinen Account.\n\nUm einen Account zu beanspruchen benutze ```-c claim```");
+                            } else if (!admatch.find() || !accounts.containsValue(admatch.group(0))) {
+                                eb.setColor(Color.RED);
+                                eb.setDescription("Keinen gültigen Account angegeben.\nBitte stelle sicher, dass alles richtig geschrieben ist!");
+                            } else if (!ammatch.find()) {
+                                eb.setColor(Color.RED);
+                                eb.setDescription("Keine Menge angegeben!");
+                            }
                         }
                         channel.sendMessage(eb.build()).queue();
                     }
@@ -306,6 +326,26 @@ public class WalleBotApplication extends ListenerAdapter {
                             }
                             channel.sendMessage(eb.build()).queue();
                         }
+                    }
+                }else if (msg.getContentRaw().startsWith("-fuckup")) {
+                    EmbedBuilder eb = new EmbedBuilder();
+                    Pattern rpat = Pattern.compile("\".*\"");
+                    Matcher rmat = rpat.matcher(msg.getContentRaw());
+                    if(rmat.find()) {
+                        if (msg.getContentRaw().contains("small")) {
+                            eb.setTitle("Minemo fucked up small time");
+                            eb.setColor(Color.GREEN);
+                            eb.setDescription("**Grund:** " + rmat.group());
+                        } else if (msg.getContentRaw().contains("medium")) {
+                            eb.setTitle("Minemo fucked up medium time");
+                            eb.setColor(Color.YELLOW);
+                            eb.setDescription("**Grund:** " + rmat.group());
+                        } else if (msg.getContentRaw().contains("big")) {
+                            eb.setTitle("Minemo fucked up big time");
+                            eb.setColor(Color.RED);
+                            eb.setDescription("**Grund:** " + rmat.group());
+                        }
+                        channel.sendMessage(eb.build()).queue();
                     }
                 }
             }

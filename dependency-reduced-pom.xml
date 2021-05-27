@@ -10,7 +10,7 @@
   <groupId>com.minemo</groupId>
   <artifactId>walle-bot</artifactId>
   <name>walle-bot</name>
-  <version>1.0</version>
+  <version>1.4.5</version>
   <description>WallE Discord Bot</description>
   <build>
     <plugins>

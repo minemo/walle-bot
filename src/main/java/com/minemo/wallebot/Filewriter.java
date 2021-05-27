@@ -29,7 +29,7 @@ public class Filewriter {
         }
     }
 
-    public static Hashtable<String, String> readlines(String filename) throws IOException {
+    public static Hashtable<String, String> readlines(String filename, Boolean inverse) throws IOException {
         Decoder dec = Base64.getDecoder();
         Hashtable<String, String> newaccs = new Hashtable<>();
         if (Files.exists(Path.of(filename))) {
@@ -42,7 +42,11 @@ public class Filewriter {
                 if(addrmat.find() && usrmat.find()) {
                     String usr = new String(dec.decode(usrmat.group(0).stripTrailing()), StandardCharsets.UTF_8);
                     String address = addrmat.group();
-                    newaccs.put(usr, address);
+                    if(!inverse) {
+                        newaccs.put(usr, address);
+                    }else {
+                        newaccs.put(address, usr);
+                    }
                 }
             }
             return newaccs;
