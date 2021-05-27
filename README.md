@@ -1,12 +1,10 @@
 # Walle-Bot
 
----
 ## What is this ?
 This is discord bot with some features for me and my friends.
 It mainly focuses on a blockchain-based earn and reward system,
 to make the server more fun to use.
 
----
 ## What can it do ?
 The features of this bot currently include:
 + **DEBUG** show all accounts, and their respective balances
@@ -35,7 +33,7 @@ _Rewards for being online get displayed in another channel_
 
 ![alt text](https://i.imgur.com/JCMTMzC.png "The bot displays the amount, name and profile-picture of the earner")
 
----
+
 ## What is planned ?
 _I constantly get new ideas on what to add to the bot, so don't expect this list to be up to date._
 
@@ -49,7 +47,7 @@ Some planned features are:
     3. Eastereggs
 + ...
     
----
+
 ## Where can I test this ?
 This bot currently only runs on our [Discord server](https://discord.gg/hEmGXFmdFS).
     
